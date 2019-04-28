@@ -1,0 +1,111 @@
+import java.util.Scanner;
+
+class Main {
+  public static void main(String[] args) {
+    char[][] board = {
+      {'*', '*', '*', '*', '*', '*', '*', '*', '*', '*'},
+      {'*', '*', '*', '*', '*', '*', '*', '*', '*', '*'},
+      {'*', '*', '*', '*', '*', '*', '*', '*', '*', '*'},
+      {'*', '*', '*', '*', '*', '*', '*', '*', '*', '*'},
+      {'*', '*', '*', '*', '*', '*', '*', '*', '*', '*'},
+      {'*', '*', '*', '*', '*', '*', '*', '*', '*', '*'},
+      {'*', '*', '*', '*', '*', '*', '*', '*', '*', '*'},
+      {'*', '*', '*', '*', '*', '*', '*', '*', '*', '*'},
+      {'*', '*', '*', '*', '*', '*', '*', '*', '*', '*'},
+      {'*', '*', '*', '*', '*', '*', '*', '*', '*', '*'},
+    };
+
+    Point[] ships = new Point[10];
+
+    for (int i = 0; i <=9; i++){//building ten ships
+      Point aShip = new Point();
+      while (aShip.isIn(ships)){
+        aShip = new Point();
+      }
+      ships[i] = new Point(aShip);
+    }
+
+    int userHits = 0;
+    int userTries = 0;
+
+    Scanner input = new Scanner(System.in);
+    String userInput;
+    Point userPoint;
+    int x, y;
+
+    while (userHits < 10){
+      displayBoard(board);
+      System.out.println("Enter two integers between 0-9:");
+      x = input.nextInt();
+      y = input.nextInt();
+      userPoint = new Point(x,y);
+      userTries++;
+
+      if (board[x][y] == '*'){ //user has not tried this point
+        if (userPoint.isIn(ships)){  //hit
+          userHits++;
+          board[x][y] = '+';
+        }
+        else // miss
+          board[x][y] = '-';
+      }
+      else {
+        System.out.println("You have already entered that value:");
+      }
+        
+    }
+
+    System.out.println("You win! It took you " + userTries + " tries to win!");
+
+    
+  }
+
+  public static void displayBoard(char[][] board){
+    for (int i = 0; i < 10; i++){
+      for (int j = 0; j < 10; j++ ){
+        System.out.print(board[i][j]);
+        System.out.print("  ");
+      }
+      System.out.println();
+    }
+  }
+
+
+}
+
+
+
+class Point{
+  int x;
+  int y;
+
+  public Point(int x, int y){
+    this.x = x;
+    this.y = y;
+  }
+
+  public Point(){
+    this.x = (int)(Math.random()*10);
+    this.y = (int)(Math.random()*10);
+  }
+
+  public Point(Point p){
+    this.x = p.x;
+    this.y = p.y;
+  }
+
+  public boolean isSame(Point ship){
+    return(this.x==ship.x && this.y==ship.y);
+  }
+
+  public boolean isIn(Point[] ships){
+    for (int k = 0;k < ships.length; k++){
+      if (ships[k]==null)
+        return false;
+      if (this.isSame(ships[k]))
+        return true;
+    }
+    return false;
+  }
+
+}
